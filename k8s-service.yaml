@@ -1,0 +1,13 @@
+# k8s-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-app
+  namespace: production
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: k8s-app
+  type: LoadBalancer

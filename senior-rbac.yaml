@@ -1,0 +1,76 @@
+# senior-rbac.yaml
+# Test namespace için Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: test
+  name: senior-full-access
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+# Production namespace için Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: production
+  name: senior-full-access
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+# Cluster geneli için ClusterRole (okuma ve listeleme)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: senior-read-only-cluster
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+---
+# Senior grubu için RoleBinding (test namespace)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: test
+  name: senior-full-access-binding
+subjects:
+- kind: Group
+  name: senior
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: senior-full-access
+  apiGroup: rbac.authorization.k8s.io
+---
+# Senior grubu için RoleBinding (production namespace)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: production
+  name: senior-full-access-binding
+subjects:
+- kind: Group
+  name: senior
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: senior-full-access
+  apiGroup: rbac.authorization.k8s.io
+---
+# Senior grubu için ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: senior-read-only-cluster-binding
+subjects:
+- kind: Group
+  name: senior
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: senior-read-only-cluster
+  apiGroup: rbac.authorization.k8s.io

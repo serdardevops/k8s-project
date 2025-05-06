@@ -1,0 +1,12 @@
+# pod-reader.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-reader
+  namespace: default
+spec:
+  serviceAccountName: pod-reader
+  containers:
+  - name: curl
+    image: curlimages/curl
+    command: ["sleep", "3600"]
